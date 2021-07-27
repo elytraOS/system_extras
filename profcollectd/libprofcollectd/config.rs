@@ -97,10 +97,10 @@ impl FromStr for Config {
 }
 
 fn get_or_initialise_node_id() -> Result<MacAddr6> {
-    let mut node_id = get_property(&PROFCOLLECT_NODE_ID_PROPERTY, MacAddr6::nil())?;
+    let mut node_id = get_property(PROFCOLLECT_NODE_ID_PROPERTY, MacAddr6::nil())?;
     if node_id.is_nil() {
         node_id = generate_random_node_id();
-        set_property(&PROFCOLLECT_NODE_ID_PROPERTY, node_id);
+        set_property(PROFCOLLECT_NODE_ID_PROPERTY, node_id);
     }
 
     Ok(node_id)
@@ -117,8 +117,8 @@ where
 {
     let default_value = default_value.to_string();
     let config = profcollect_libflags_rust::GetServerConfigurableFlag(
-        &PROFCOLLECT_CONFIG_NAMESPACE,
-        &key,
+        PROFCOLLECT_CONFIG_NAMESPACE,
+        key,
         &default_value,
     );
     Ok(T::from_str(&config)?)
@@ -130,7 +130,7 @@ where
     T::Err: Error + Send + Sync + 'static,
 {
     let default_value = default_value.to_string();
-    let value = profcollect_libbase_rust::GetProperty(&key, &default_value);
+    let value = profcollect_libbase_rust::GetProperty(key, &default_value);
     Ok(T::from_str(&value)?)
 }
 
@@ -139,7 +139,7 @@ where
     T: ToString,
 {
     let value = value.to_string();
-    profcollect_libbase_rust::SetProperty(&key, &value);
+    profcollect_libbase_rust::SetProperty(key, &value);
 }
 
 fn generate_random_node_id() -> MacAddr6 {
